@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Reserva</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Centrar el título */
+        h1 {
+            text-align: center;
+        }
+        
+        /* Centrar el botón de "Guardar Cambios" */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        input[type="submit"] {
+            width: auto;
+            margin-top: 20px;
+        }
+        
+        /* Centrar el enlace de "Volver a las reservas" */
+        .centered-link {
+            text-align: center;
+            margin-top: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Reserva</h1>
+        
+        <form method="POST">
+            <label for="fecha_desde">Fecha Desde:</label>
+            <input type="date" name="fecha_desde" value="{{ reserva.fecha_desde }}" required>
+            
+            <label for="fecha_hasta">Fecha Hasta:</label>
+            <input type="date" name="fecha_hasta" value="{{ reserva.fecha_hasta }}">
+
+            <label for="nombre_cliente">Nombre del Cliente:</label>
+            <input type="text" name="nombre_cliente" value="{{ reserva.nombre_cliente }}" required>
+            
+            <label for="telefono">Teléfono:</label>
+            <input type="text" name="telefono" value="{{ reserva.telefono }}" required>
+            
+            <label for="tipo_evento">Tipo de Evento:</label>
+            <input type="text" name="tipo_evento" value="{{ reserva.tipo_evento }}" required>
+            
+            <label for="total">Total:</label>
+            <input type="number" step="0.01" name="total" value="{{ reserva.total }}" required>
+            
+            <label for="sena">Seña:</label>
+            <input type="number" step="0.01" name="sena" value="{{ reserva.sena }}" required>
+            
+            <label for="metodo_pago">Método de Pago:</label>
+            <input type="text" name="metodo_pago" value="{{ reserva.metodo_pago }}" required>
+            
+            <label for="dirigido_a">Dirigido a:</label>
+            <input type="text" name="dirigido_a" value="{{ reserva.dirigido_a }}" required>
+            
+            <label for="resto">Resto:</label>
+            <input type="number" step="0.01" name="resto" value="{{ reserva.resto }}" required>
+
+            <label for="observaciones">Observaciones:</label>
+            <textarea name="observaciones">{{ reserva.observaciones }}</textarea>
+
+            <input type="submit" value="Guardar Cambios">
+        </form>
+        
+        <a href="{{ url_for('ver_reservas') }}" class="centered-link">Volver a las reservas</a>
+    </div>
+</body>
+</html>

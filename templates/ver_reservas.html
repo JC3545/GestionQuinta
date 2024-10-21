@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Reservas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .centered {
+            text-align: center; /* Centrar el texto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="centered">Tus Reservas</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha (Desde - Hasta)</th>
+                    <th>Nombre del Cliente</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserva in reservas %}
+                <tr>
+                    <td>{{ reserva.fecha_desde }} - {{ reserva.fecha_hasta }}</td> <!-- Mostrar las fechas -->
+                    <td>{{ reserva.nombre_cliente }}</td>
+                    <td>{{ reserva.telefono }}</td>
+                    <td>
+                        <a href="{{ url_for('ver_detalle_reserva', reserva_id=reserva.id) }}">
+                            <button>Ver</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Botón de Home -->
+        <div class="centered">
+            <a href="{{ url_for('home') }}">
+                <button>Home</button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

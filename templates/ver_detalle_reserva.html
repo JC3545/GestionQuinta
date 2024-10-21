@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Reserva</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h2>Detalles de Reserva</h2>
+    <div class="container">
+        <p><strong>Fecha Desde:</strong> {{ reserva.fecha_desde }}</p>
+        <p><strong>Fecha Hasta:</strong> {{ reserva.fecha_hasta }}</p>
+        <p><strong>Nombre:</strong> {{ reserva.nombre_cliente }}</p>
+        <p><strong>Teléfono:</strong> {{ reserva.telefono }}</p>
+        <p><strong>Tipo de Evento:</strong> {{ reserva.tipo_evento }}</p>
+        <p><strong>Total:</strong> ${{ reserva.total }}</p>
+        <p><strong>Seña:</strong> ${{ reserva.sena }}</p>
+        <p><strong>Método de Pago:</strong> {{ reserva.metodo_pago }}</p>
+        <p><strong>Dirigido a:</strong> {{ reserva.dirigido_a }}</p>
+        <p><strong>Resto:</strong> ${{ reserva.resto }}</p>
+        <p><strong>Observaciones:</strong> {{ reserva.observaciones }}</p>
+    </div>
+    <div class="centered">
+        <form action="{{ url_for('eliminar_reserva', reserva_id=reserva.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="delete-button">Eliminar</button>
+        </form>
+        <a href="{{ url_for('editar_reserva', reserva_id=reserva.id) }}">
+            <button class="edit-button">Editar</button>
+        </a>
+    </div>
+    
+    <div class="button-group centered">
+        <a href="{{ url_for('ver_reservas') }}" class="green-button">Volver a Reservas</a>
+        <a href="{{ url_for('logout') }}" class="red-button">Logout</a>
+    </div>
+</body>
+</html>

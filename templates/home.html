@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Estilo para centrar el contenido */
+        .centered {
+            text-align: center; /* Centra el texto y los elementos en línea dentro del contenedor */
+            margin: 15px 0; /* Espaciado vertical */
+        }
+
+        /* Estilo para el botón de verificar fecha */
+        input[type="submit"] {
+            background-color: #5bc0de; /* Color por defecto */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #31b0d5; /* Color al pasar el ratón */
+        }
+
+        /* Estilos específicos para los botones de acciones */
+        .btn-ver-reservas {
+            background-color: #5cb85c; /* Verde */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-ver-reservas:hover {
+            background-color: #4cae4c; /* Color más oscuro al pasar el ratón */
+        }
+
+        .btn-cerrar-sesion {
+            background-color: #d9534f; /* Rojo */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-cerrar-sesion:hover {
+            background-color: #c9302c; /* Color más oscuro al pasar el ratón */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="centered">Bienvenido, {{ current_user.username }}</h1>
+
+        <!-- Campo para ingresar fecha -->
+        <form method="POST" action="{{ url_for('verificar_fecha') }}">
+            <label for="fecha_verificacion">Ingrese una fecha:</label>
+            <input type="date" name="fecha_verificacion" required>
+            <div class="centered">
+                <input type="submit" value="Verificar Fecha">
+            </div>
+        </form>
+
+        <!-- Enlaces a otras secciones -->
+        <div class="centered">
+            <a href="{{ url_for('ver_reservas') }}">
+                <input type="button" class="btn-ver-reservas" value="Ver Reservas">
+            </a>
+            <a href="{{ url_for('logout') }}">
+                <input type="button" class="btn-cerrar-sesion" value="Cerrar Sesión">
+            </a>
+        </div>
+    </div>
+</body>
+</html>

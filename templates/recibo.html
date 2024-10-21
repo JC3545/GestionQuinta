@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recibo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .detalle {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recibo de Reserva</h1>
+    <div class="detalle">
+        <p><strong>Nombre del Cliente:</strong> {{ nombre_cliente }}</p>
+        <p><strong>Teléfono:</strong> {{ telefono }}</p>
+        <p><strong>Tipo de Evento:</strong> {{ tipo_evento }}</p>
+        <p><strong>Total:</strong> {{ total }}</p>
+        <p><strong>Seña:</strong> {{ sena }}</p>
+        <p><strong>Resto:</strong> {{ resto }}</p>
+        <p><strong>Método de Pago:</strong> {{ metodo_pago }}</p>
+    </div>
+    <p>Gracias por elegirnos.</p>
+</body>
+</html>
