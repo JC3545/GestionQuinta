@@ -159,6 +159,7 @@ def cargar_reserva():
         flash('Reserva cargada exitosamente')
 
         if metodo_pago.lower() == 'efectivo':
+            # Redirige primero a la generación del recibo
             return redirect(url_for('generar_recibo', reserva_id=nueva_reserva.id))
 
         return redirect(url_for('home'))
@@ -220,31 +221,45 @@ def eliminar_reserva(reserva_id):
     return redirect(url_for('ver_reservas'))
 
 
-@app.route('/generar_recibo/<int:reserva_id>')
+@app.route('/generar_recibo/<int:reserva_id>', methods=['GET', 'POST'])
 @login_required
 def generar_recibo(reserva_id):
+    # Obtener la reserva por su ID
     reserva = Reserva.query.get_or_404(reserva_id)
 
+    # Ruta donde se guardará el PDF
+    recibo_dir = os.path.join(BASE_DIR, 'recibos')
+    if not os.path.exists(recibo_dir):
+        os.makedirs(recibo_dir)  # Crea el directorio si no existe
+
+    # Nombre del archivo PDF
+    filename = f'recibo_reserva_{reserva_id}.pdf'
+    filepath = os.path.join(recibo_dir, filename)
+
     # Generar el PDF
-    filename = f'recibo_reserva_{reserva.id}.pdf'
-    filepath = os.path.join('instance', filename)
-    
     c = canvas.Canvas(filepath, pagesize=letter)
-    c.drawString(100, 750, f"Recibo de Reserva")
-    c.drawString(100, 730, f"Fecha Desde: {reserva.fecha_desde}")
-    c.drawString(100, 710, f"Fecha Hasta: {reserva.fecha_hasta}")
-    c.drawString(100, 690, f"Nombre del Cliente: {reserva.nombre_cliente}")
-    c.drawString(100, 670, f"Teléfono: {reserva.telefono}")
-    c.drawString(100, 650, f"Tipo de Evento: {reserva.tipo_evento}")
-    c.drawString(100, 630, f"Total: ${reserva.total:.2f}")
-    c.drawString(100, 610, f"Seña: ${reserva.sena:.2f}")
-    c.drawString(100, 590, f"Método de Pago: {reserva.metodo_pago}")
-    c.drawString(100, 570, f"Dirigido a: {reserva.dirigido_a}")
-    c.drawString(100, 550, f"Resto: ${reserva.resto:.2f}")
-    c.drawString(100, 530, f"Observaciones: {reserva.observaciones if reserva.observaciones else 'Ninguna'}")
+    c.drawString(100, 750, f"Recibo de reserva #{reserva.id}")
+    c.drawString(100, 725, f"Cliente: {reserva.nombre_cliente}")
+    c.drawString(100, 700, f"Teléfono: {reserva.telefono}")
+    c.drawString(100, 675, f"Fecha: {reserva.fecha_desde} - {reserva.fecha_hasta}")
+    c.drawString(100, 650, f"Tipo de evento: {reserva.tipo_evento}")
+    c.drawString(100, 625, f"Total: ${reserva.total}")
+    c.drawString(100, 600, f"Seña: ${reserva.sena}")
+    c.drawString(100, 575, f"Resto: ${reserva.resto}")
     c.save()
 
-    return send_file(filepath, as_attachment=True)
+    # Verificar si el archivo existe antes de enviarlo
+    if os.path.exists(filepath):
+        try:
+            return send_file(filepath, as_attachment=True, download_name=filename)
+        except Exception as e:
+            flash(f"Error al enviar el archivo: {str(e)}", "danger")
+            return redirect(url_for('home'))
+    else:
+        flash("El archivo no fue encontrado.", "danger")
+        return redirect(url_for('home'))
+
+
 
 if __name__ == '__main__':
     with app.app_context():

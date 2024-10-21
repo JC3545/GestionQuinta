@@ -44,6 +44,10 @@
         .green-button:hover {
             background-color: #218838; /* Color más oscuro al pasar el ratón */
         }
+
+        .centered {
+            text-align: center;
+        }
     </style>
     <script>
         function calcularResto() {
@@ -70,18 +74,43 @@
             const selectedButton = document.getElementById(metodo);
             selectedButton.classList.add('selected');
         }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();  // Previene el envío normal del formulario
+
+            // Enviar el formulario manualmente con JavaScript
+            fetch(event.target.action, {
+                method: 'POST',
+                body: new FormData(event.target)
+            }).then(response => {
+                if (response.ok) {
+                    response.blob().then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'recibo_reserva.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.location.href = "{{ url_for('home') }}"; // Redirigir a home inmediatamente
+                    });
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <h1 class="centered">Cargar Reserva</h1>
         
-        <form method="POST">
+        <form method="POST" action="{{ url_for('cargar_reserva') }}" onsubmit="handleFormSubmit(event)">
             <label for="fecha_desde">Fecha Desde:</label>
             <input type="date" name="fecha_desde" required>
             
             <label for="fecha_hasta">Fecha Hasta:</label>
-            <input type="date" name="fecha_hasta"
+            <input type="date" name="fecha_hasta" required>
             
             <label for="nombre_cliente">Nombre del Cliente:</label>
             <input type="text" name="nombre_cliente" required>
@@ -123,4 +152,8 @@
         <div class="centered">
             <a href="{{ url_for('home') }}">
                 <input type="button" class="green-button" value="Volver">
-  
+            </a>
+        </div>
+    </div>
+</body>
+</html>
