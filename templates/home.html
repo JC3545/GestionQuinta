@@ -12,6 +12,19 @@
             margin: 15px 0; /* Espaciado vertical */
         }
 
+        /* Estilo para los mensajes de alerta */
+        .alert {
+            background-color: #f8d7da; /* Fondo rojo claro */
+            color: #721c24; /* Texto rojo oscuro */
+            padding: 15px;
+            border: 1px solid #f5c6cb; /* Borde rojo */
+            border-radius: 4px;
+            margin: 15px auto; /* Margen automático para centrar horizontalmente */
+            width: fit-content; /* Ajusta el ancho al contenido */
+            max-width: 80%; /* Limita el ancho máximo */
+            text-align: center; /* Centra el texto dentro del mensaje */
+        }
+
         /* Estilo para el botón de verificar fecha */
         input[type="submit"] {
             background-color: #5bc0de; /* Color por defecto */
@@ -56,9 +69,34 @@
             background-color: #c9302c; /* Color más oscuro al pasar el ratón */
         }
     </style>
+    <script>
+        // Función para ocultar mensajes flash después de unos segundos
+        function hideFlashMessages() {
+            const alertMessages = document.querySelectorAll('.alert');
+            alertMessages.forEach((alert) => {
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 5000); // Ocultar después de 5 segundos
+            });
+        }
+
+        // Ejecutar la función al cargar la página
+        window.onload = hideFlashMessages;
+    </script>
 </head>
 <body>
     <div class="container">
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <h1 class="centered">Bienvenido, {{ current_user.username }}</h1>
 
         <!-- Campo para ingresar fecha -->

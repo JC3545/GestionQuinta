@@ -115,10 +115,11 @@ def verificar_fecha():
     ).all()
 
     if reservas:
-        flash('La fecha ya está reservada.')
+        flash('La fecha ya está reservada.')  # Mensaje de fecha no disponible
         return redirect(url_for('home'))  # Redirige a la página de inicio
     else:
         return redirect(url_for('cargar_reserva'))  # Redirige a cargar reserva
+
 
 
 @app.route('/cargar_reserva', methods=['GET', 'POST'])
