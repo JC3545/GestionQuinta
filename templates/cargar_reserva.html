@@ -71,7 +71,7 @@
             });
 
             // Agregar la clase 'selected' al botón presionado
-            const selectedButton = document.getElementById(metodo);
+            const selectedButton = document.getElementById(metodo.toLowerCase());
             selectedButton.classList.add('selected');
         }
 
@@ -107,7 +107,7 @@
         
         <form method="POST" action="{{ url_for('cargar_reserva') }}" onsubmit="handleFormSubmit(event)">
             <label for="fecha_desde">Fecha Desde:</label>
-            <input type="date" name="fecha_desde" required>
+            <input type="date" name="fecha_desde" value="{{ fecha_desde | default('') }}" required> <!-- Cargar fecha automáticamente -->
             
             <label for="fecha_hasta">Fecha Hasta:</label>
             <input type="date" name="fecha_hasta" required>

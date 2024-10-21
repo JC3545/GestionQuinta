@@ -118,13 +118,16 @@ def verificar_fecha():
         flash('La fecha ya está reservada.')  # Mensaje de fecha no disponible
         return redirect(url_for('home'))  # Redirige a la página de inicio
     else:
-        return redirect(url_for('cargar_reserva'))  # Redirige a cargar reserva
+        return redirect(url_for('cargar_reserva', fecha_desde=fecha_verificacion))  # Pasa la fecha
+
 
 
 
 @app.route('/cargar_reserva', methods=['GET', 'POST'])
 @login_required
 def cargar_reserva():
+    fecha_desde = request.args.get('fecha_desde')  # Obtener la fecha pasada como parámetro
+
     if request.method == 'POST':
         fecha_desde = request.form['fecha_desde']
         fecha_hasta = request.form['fecha_hasta'] or fecha_desde  # Si está vacío, toma el valor de "desde"
@@ -164,7 +167,8 @@ def cargar_reserva():
 
         return redirect(url_for('home'))
     else:
-        return render_template('cargar_reserva.html')
+        return render_template('cargar_reserva.html', fecha_desde=fecha_desde)  # Pasa la fecha a la plantilla
+
 
     
 @app.route('/ver_reservas')
