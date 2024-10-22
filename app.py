@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from fpdf import FPDF
 import os
 
 app = Flask(__name__)
@@ -240,16 +242,64 @@ def generar_recibo(reserva_id):
     filename = f'recibo_reserva_{reserva_id}.pdf'
     filepath = os.path.join(recibo_dir, filename)
 
+    # Ruta de la imagen de marca de agua
+    watermark_path = os.path.join(BASE_DIR, 'static', 'imagenes', 'marca_agua.png')
+
     # Generar el PDF
     c = canvas.Canvas(filepath, pagesize=letter)
-    c.drawString(100, 750, f"Recibo de reserva #{reserva.id}")
-    c.drawString(100, 725, f"Cliente: {reserva.nombre_cliente}")
-    c.drawString(100, 700, f"Teléfono: {reserva.telefono}")
-    c.drawString(100, 675, f"Fecha: {reserva.fecha_desde} - {reserva.fecha_hasta}")
-    c.drawString(100, 650, f"Tipo de evento: {reserva.tipo_evento}")
-    c.drawString(100, 625, f"Total: ${reserva.total}")
-    c.drawString(100, 600, f"Seña: ${reserva.sena}")
-    c.drawString(100, 575, f"Resto: ${reserva.resto}")
+    width, height = letter
+
+    # Cargar la imagen de la marca de agua
+    watermark = ImageReader(watermark_path)
+
+    # Obtener el tamaño original de la imagen
+    img_width, img_height = watermark.getSize()
+
+    # Establecer un tamaño base para la marca de agua
+    desired_width = 200  # Ajusta esto según el tamaño que desees
+    aspect_ratio = img_height / img_width
+    desired_height = desired_width * aspect_ratio  # Mantiene la proporción
+
+    # Repetir la imagen en un patrón de mosaico, manteniendo las proporciones
+    x_offset = 0
+    y_offset = 0
+    while y_offset < height:
+        while x_offset < width:
+            c.drawImage(watermark, x_offset, y_offset, width=desired_width, height=desired_height, mask='auto')
+            x_offset += desired_width  # Avanza en el eje x
+        x_offset = 0  # Resetea x para la siguiente fila
+        y_offset += desired_height  # Avanza en el eje y
+
+    # Título centrado en varias líneas
+    c.setFont("Helvetica-Bold", 12)
+    title_lines = [
+        "Gracias por confiar en nosotros.",
+        "Que cada momento en nuestra casaquinta sea especial.",
+        "¡Disfruta tu día!"
+    ]
+
+    # Calcular la posición inicial para el título
+    title_y = 750
+    line_height = 20  # Espaciado entre líneas
+
+    # Dibuja cada línea del título
+    for i, line in enumerate(title_lines):
+        c.drawString((width - c.stringWidth(line)) / 2, title_y - (i * line_height), line)
+
+    # Añadir el contenido del recibo centrado
+    c.setFont("Helvetica-Bold", 10)  # Cambiar a negrita para datos
+    # Establecer una posición fija debajo del título
+    data_y_start = title_y - (len(title_lines) * line_height) - 10  # Un poco más abajo del título
+
+    c.drawString((width - c.stringWidth(f"Recibo de reserva #{reserva.id}")) / 2, data_y_start, f"Recibo de reserva #{reserva.id}")
+    c.drawString((width - c.stringWidth(f"Cliente: {reserva.nombre_cliente}")) / 2, data_y_start - 25, f"Cliente: {reserva.nombre_cliente}")
+    c.drawString((width - c.stringWidth(f"Teléfono: {reserva.telefono}")) / 2, data_y_start - 50, f"Teléfono: {reserva.telefono}")
+    c.drawString((width - c.stringWidth(f"Fecha: {reserva.fecha_desde} - {reserva.fecha_hasta}")) / 2, data_y_start - 75, f"Fecha: {reserva.fecha_desde} - {reserva.fecha_hasta}")
+    c.drawString((width - c.stringWidth(f"Tipo de evento: {reserva.tipo_evento}")) / 2, data_y_start - 100, f"Tipo de evento: {reserva.tipo_evento}")
+    c.drawString((width - c.stringWidth(f"Total: ${reserva.total:.2f}")) / 2, data_y_start - 125, f"Total: ${reserva.total:.2f}")
+    c.drawString((width - c.stringWidth(f"Seña: ${reserva.sena:.2f}")) / 2, data_y_start - 150, f"Seña: ${reserva.sena:.2f}")
+    c.drawString((width - c.stringWidth(f"Resto: ${reserva.resto:.2f}")) / 2, data_y_start - 175, f"Resto: ${reserva.resto:.2f}")
+
     c.save()
 
     # Verificar si el archivo existe antes de enviarlo
@@ -262,6 +312,8 @@ def generar_recibo(reserva_id):
     else:
         flash("El archivo no fue encontrado.", "danger")
         return redirect(url_for('home'))
+
+
 
 
 
