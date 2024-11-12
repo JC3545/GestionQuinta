@@ -11,24 +11,52 @@ body {
     line-height: 1.6;
 }
 
-h2 {
+body {
+    --font-color-text: #ebebeb;
+    --font-color-highlight: #e67e2d;
+    --font-color-on-highlight: #000;
+    --color-highlight: #febd59;
+    --color-highlight-hover: #e67e2d;
+}
+
+h1 {
     text-align: center;
-    margin: 20px 0;
+    margin: 5px 0 10px 0;
     color: #e67e22; /* Cambiado a un color vibrante */
+}
+
+a {
+    color: var(--font-color-highlight);
+}
+
+img.logo {
+    margin-top:1em;
+    margin-bottom:2em;
+}
+
+body {
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .centered {
     text-align: center;
-    margin-top: 10px;
 }
 
 .container {
-    max-width: 90%;
+    width: 60%;
     margin: 20px auto;
-    padding: 20px;
-    background: #34495e; /* Fondo de contenedor */
+    padding: 20px 4vw;
+    background: #003b77b5; /* Fondo de contenedor */
     border-radius: 5px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 .user-info {
@@ -40,10 +68,22 @@ h2 {
     text-align: center;
 }
 
+.centered:has(a) {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+}
+
+.centered a {
+    width: 50%;
+}
+
 /* Eliminar el estilo por defecto del formulario */
 form {
-    max-width: 400px;
-    margin: 20px auto;
+    width: 100%;
+    margin: 5px 0;
     padding: 0;
     background: none; /* Elimina el fondo */
     border: none; /* Elimina el borde */
@@ -53,7 +93,7 @@ form {
 label {
     display: block;
     margin-bottom: 5px;
-    color: #333; /* Color del texto de etiquetas */
+    color: var(--font-color-text); /* Color del texto de etiquetas */
 }
 
 input[type="text"],
@@ -66,6 +106,28 @@ textarea {
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+@media (max-width:900px) {
+    .container {
+        width:90%;
+    }
+    body {
+        background-size: auto;
+        background-repeat: no-repeat;
+        background-position: initial;
+    }
+    form {
+        margin: 10px;
+        width: 100%;
+    }
+    table {
+        font-size: 11px;
+        line-height: 13px;
+    }
+    img.logo.footer {
+        margin-top: 85%;
+    }
 }
 
 .user-info {
@@ -118,13 +180,14 @@ button {
     width: auto;
     max-width: 150px;
     padding: 10px;
-    background-color: #5cb85c;
-    color: white;
+    background-color: var(--color-highlight);
+    color: var(--font-color-on-highlight);
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin: 5px; /* Espaciado entre botones */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para botones */
+    transition: 500ms;
 }
 
 .ver-reservas-button {
@@ -168,12 +231,13 @@ button {
 }
 
 button:hover {
-    background-color: #4cae4c;
+    background-color: var(--color-highlight-hover);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    margin: 10px 0;
 }
 
 th, td {
@@ -191,6 +255,20 @@ th {
     display: block;
     margin: 20px auto;
     width: 50%;
+}
+
+.close {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: var(--color-highlight);
+    font-weight: 900;
+    font-size: 2em;
 }
 
 .green-button {
@@ -229,9 +307,68 @@ th {
     font-size: 18px;
 }
 
-@media (max-width: 600px) {
-    form {
-        margin: 10px;
-        padding: 15px;
-    }
+/* Estilo para centrar el contenido */
+.centered {
+    text-align: center; /* Centra el texto y los elementos en línea dentro del contenedor */
+    margin: 15px 0; /* Espaciado vertical */
+}
+
+/* Estilo para los mensajes de alerta */
+.alert {
+    background-color: #f8d7da; /* Fondo rojo claro */
+    color: #721c24; /* Texto rojo oscuro */
+    padding: 15px;
+    border: 1px solid #f5c6cb; /* Borde rojo */
+    border-radius: 4px;
+    margin: 15px auto; /* Margen automático para centrar horizontalmente */
+    width: fit-content; /* Ajusta el ancho al contenido */
+    max-width: 80%; /* Limita el ancho máximo */
+    text-align: center; /* Centra el texto dentro del mensaje */
+}
+
+/* Estilo para el botón de verificar fecha */
+input[type="submit"] {
+    background-color: #5bc0de; /* Color por defecto */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #31b0d5; /* Color al pasar el ratón */
+}
+
+/* Estilos específicos para los botones de acciones */
+.btn-ver-reservas {
+    background-color: #5cb85c; /* Verde */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width:100%;
+}
+
+.btn-ver-reservas:hover {
+    background-color: #4cae4c; /* Color más oscuro al pasar el ratón */
+}
+
+.btn-cerrar-sesion {
+    background-color: #d9534f; /* Rojo */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width:100%;
+}
+
+.btn-cerrar-sesion:hover {
+    background-color: #c9302c; /* Color más oscuro al pasar el ratón */
 }

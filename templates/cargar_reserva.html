@@ -103,6 +103,12 @@
 </head>
 <body>
     <div class="container">
+        <div class="close">
+            <a href="{{ url_for('home') }}">
+                <input type="button" class="close-button" value="X">
+            </a>
+        </div>
+
         <h1 class="centered">Cargar Reserva</h1>
         
         <form method="POST" action="{{ url_for('cargar_reserva') }}" onsubmit="handleFormSubmit(event)">
@@ -155,5 +161,11 @@
             </a>
         </div>
     </div>
+
+    <script>
+        const backgroundImage = "{{ url_for('static', filename='Imagenes/background.jpg') }}";
+        document.body.style.backgroundImage = `url(${backgroundImage})`;
+    </script>
+
 </body>
 </html>

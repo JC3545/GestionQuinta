@@ -7,8 +7,9 @@
     <title>Iniciar Sesión</title>
 </head>
 <body>
-    <div class="container">
-        <h2 class="centered">Iniciar Sesión</h2>
+    <div class="container login">
+        <img src="{{ url_for('static', filename='Imagenes/casaquintablanco.png') }}" width="250px" class="logo">
+        <h1 class="centered">Iniciar Sesión</h1>
 
         <form method="POST" action="{{ url_for('login') }}">
             <label for="username">Usuario:</label>
@@ -24,5 +25,11 @@
 
         <p class="centered">¿No tienes una cuenta? <a href="{{ url_for('register') }}">Regístrate aquí</a></p>
     </div>
+
+    <script>
+      const backgroundImage = "{{ url_for('static', filename='Imagenes/background.jpg') }}";
+      document.body.style.backgroundImage = `url(${backgroundImage})`;
+    </script>
+
 </body>
 </html>
